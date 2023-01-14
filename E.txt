@@ -1,0 +1,549 @@
+Python is an easy to learn, powerful programming language. It has efficient high-level data structures and a simple but effective approach to object-oriented programming. Python’s elegant syntax and dynamic typing, together with its interpreted nature, make it an ideal language for scripting and rapid application development in many areas on most platforms.
+The Python interpreter and the extensive standard library are freely available in source or binary form for all major platforms from the Python web site, https://www.python.org/, and may be freely distributed. The same site also contains distributions of and pointers to many free third party Python modules, programs and tools, and additional documentation.
+The Python interpreter is easily extended with new functions and data types implemented in C or C++ (or other languages callable from C). Python is also suitable as an extension language for customizable applications.
+This tutorial introduces the reader informally to the basic concepts and features of the Python language and system. It helps to have a Python interpreter handy for hands-on experience, but all examples are self-contained, so the tutorial can be read off-line as well.
+For a description of standard objects and modules, see The Python Standard Library. The Python Language Reference gives a more formal definition of the language. To write extensions in C or C++, read Extending and Embedding the Python Interpreter and Python/C API Reference Manual. There are also several books covering Python in depth.
+This tutorial does not attempt to be comprehensive and cover every single feature, or even every commonly used feature. Instead, it introduces many of Python’s most noteworthy features, and will give you a good idea of the language’s flavor and style. After reading it, you will be able to read and write Python modules and programs, and you will be ready to learn more about the various Python library modules described in The Python Standard Library.
+Until now error messages haven’t been more than mentioned, but if you have tried out the examples you have probably seen some. There are (at least) two distinguishable kinds of errors: syntax errors and exceptions.
+
+8.1. Syntax Errors
+Syntax errors, also known as parsing errors, are perhaps the most common kind of complaint you get while you are still learning Python:
+
+>>>
+while True print('Hello world')
+  File "<stdin>", line 1
+    while True print('Hello world')
+                   ^
+SyntaxError: invalid syntax
+The parser repeats the offending line and displays a little ‘arrow’ pointing at the earliest point in the line where the error was detected. The error is caused by (or at least detected at) the token preceding the arrow: in the example, the error is detected at the function print(), since a colon (':') is missing before it. File name and line number are printed so you know where to look in case the input came from a script.
+
+8.2. Exceptions
+Even if a statement or expression is syntactically correct, it may cause an error when an attempt is made to execute it. Errors detected during execution are called exceptions and are not unconditionally fatal: you will soon learn how to handle them in Python programs. Most exceptions are not handled by programs, however, and result in error messages as shown here:
+
+>>>
+10 * (1/0)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ZeroDivisionError: division by zero
+4 + spam*3
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'spam' is not defined
+'2' + 2
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: can only concatenate str (not "int") to str
+The last line of the error message indicates what happened. Exceptions come in different types, and the type is printed as part of the message: the types in the example are ZeroDivisionError, NameError and TypeError. The string printed as the exception type is the name of the built-in exception that occurred. This is true for all built-in exceptions, but need not be true for user-defined exceptions (although it is a useful convention). Standard exception names are built-in identifiers (not reserved keywords).
+
+The rest of the line provides detail based on the type of exception and what caused it.
+
+The preceding part of the error message shows the context where the exception occurred, in the form of a stack traceback. In general it contains a stack traceback listing source lines; however, it will not display lines read from standard input.
+
+Built-in Exceptions lists the built-in exceptions and their meanings.
+
+import hashlib
+#WFT
+# у нас есть слово и хэш, подбираем кодировку
+# слово - University
+#W - 24351aa06be8f9a87ca573eb92db52783df5cf8066989f8ca94e426cf7a92e2d35987dff5f752732e05bb14212929d54
+print(hashlib.sha384(("University").encode()).hexdigest())
+# отгадали кодировку - sha384
+#F - Ethereum (Ответ на загадку)
+#T - какое то 7 значное число
+# промежуточный итог - "24351aa06be8f9a87ca573eb92db52783df5cf8066989f8ca94e426cf7a92e2d35987dff5f752732e05bb14212929d54Ethereum"
+# К промежуточному итогу прибавили 7 значное число и закодировали неизвестной кодировкой (мы ее узнали),
+# найти число которое добавили, если известно, что посли хэширования такой строки, хэш заканчивается на face (......face),
+# так же известно, что если к искомому числу прибавить 1 и также захэшировать, то хэш = 'sdhfkeugfskvudfiyevusvcbuysw23713vtyegvdsdhgc'
+hash = "sdhfkeugfskvudfiyevusvcbuysw23713vtyegvdsdhgc"
+x = "24351aa06be8f9a87ca573eb92db52783df5cf8066989f8ca94e426cf7a92e2d35987dff5f752732e05bb14212929d54Ethereum"
+for i in range (1000000, 9999999):
+    y = x + str(i)
+    y = hashlib.sha3_256(y.encode()).hexdigest()
+    if(y[-4:] == "face" and hashlib.sha3_256((x + str(i+1)).encode()).hexdigest() == hash):
+        print(y)
+        print(i)
+        break
+
+дерево 
+
+import hashlib
+from math import log
+
+def function(hash1, hash2):
+    hash1 = hashlib.sha256(hash1.encode()).hexdigest()
+    hash2 = hashlib.sha256(hash2.encode()).hexdigest()
+    return str(hash1) + str(hash2)
+
+with open("file.txt", "r") as file:
+    array = file.read().strip().split(" ")
+'''
+print('Enter the number of leaves.')
+n = int(input())
+array = [] * n
+for i in range(n):
+    print('Enter the value of the current leaf.')
+    temp = str(input())
+    array.append(temp)
+'''
+temp = array[len(array)-1]
+size = log(len(array), 2)
+while (size != int(size)):
+    array.append(temp)
+    size = log(len(array), 2)
+
+index = 0
+while (index != (len(array) - 1)):
+    array.append(function(array[index], array[index + 1]))
+    index += 2
+
+print('Result is ')
+print(hashlib.sha256(array[index].encode()).hexdigest())
+
+
+import hashlib
+
+with open("file.txt", "r") as file:
+    items = file.read().strip().split(" ")
+
+for i in range(len(items)):
+    items[i] = hashlib.sha256(items[i].encode()).hexdigest()
+
+count = len(items)
+while count != 1:
+    k = 0
+    flag = 0
+    if count%2!=0:
+        count += 1
+        flag = 1
+    for i in range(0, count, 2):
+        if flag == 1 and i == count-2:
+            items[k] = hashlib.sha256((items[i]+items[i]).encode()).hexdigest()
+        else:
+            items[k] = hashlib.sha256((items[i]+items[i+1]).encode()).hexdigest()
+        k+=1
+    count//=2
+print(items[0])
+
+import hashlib
+
+print ('Введите количество листьев')
+n = int (input())with open("file.txt", "r") as file:
+    array = file.read().strip().split(" ")
+ n = len(array)
+
+max = 1
+while (max < n):
+    max*=2
+
+for i in range (n, max):
+    a[i] = a[n-1]
+    
+x = 0
+while ( x!= len(a)-1):
+    a[x] = a[x].encode()
+    a[x] = hashlib.sha256(a[x]).hexdigest()
+
+    a[x+1] = a[x+1].encode()
+    a[x+1] = hashlib.sha256(a[x+1]).hexdigest()
+    
+    a.append(a[x]+a[x+1])
+    x += 2
+
+a[x] = a[x].encode()
+a[x] = hashlib.sha256(a[x]).hexdigest()
+
+print ('Хэш вершины')
+print(a[x])
+
+
+пример контракта
+
+pragma solidity 0.7.0;
+pragma experimental ABIEncoderV2; // библиотека для создания мэппинга массива структур
+contract НазваниеКонтракта {
+    struct НазваниеСтруктуры {
+    // примеры типов 
+        string поле; 
+        uint поле; 
+	  string [] поле;
+        uint [] поле;
+  address поле;
+  ИмяПеречисления поле;
+  имя структуры поле (тогда мэппинг надо делать не паблик);
+    }
+    enum ИмяПеречисления {
+	 вариант;
+	 вариант;
+    }
+    uint private имя; // приватная переменная
+    // значение которой устанавливается админом при деплое
+    mapping(тип_данных_ключа => ИмяСтруктуры) public ИмяМэппинга;
+    uint[] ikeys; // массив, хранящий ключи мэппинга, чтоб просматривать все его элементы. надо для таблицы или списка
+    mapping(тип_данных_ключа => ИмяСтруктуры []) private ИмяМэппинга;
+    ИмяМэппинга[ключ_мэппинга][индекс_структуры_в_массиве].ее_поле // так использовать
+    address public admin;
+    constructor(можно передать значение переменной, которое устанавливает админ       при деплое) public {
+        admin = msg.sender;
+    }
+    modifier isAdmin(){
+        require(admin == msg.sender, "you are not an admin.");
+        _;
+    }
+    function get_ИмяГеттера() public view returns(тип){
+        return возвращаемая_переменная;
+    }
+    // геттер для ключа мэппинга
+    function get_ikeys(uint index) public view returns(uint){
+        return ikeys[index];
+    }
+    // геттер для числа ключей мэппинга
+    function get_num_ikeys() public view returns(uint){
+        return ikeys.length;
+    }
+    // добавление новой структуры в мэппинг
+    function ИмяФункции(uint число, string memory строка, address адрес) public {
+        require( msg.sender != address(0), "wrong address.");
+        require(поле структуры, хранящее адрес == address(0), "key has been already used.");
+        мэппинг[ключ] = ИмяСтруктуры(msg.sender, другие данные);
+  ikeys.push(_key); // добавляем в массив ключ
+
+// если в структуре существует поле-массив, то необходимо создать временную переменную, например:
+  uint[] memory x;
+  мэппинг[ключ] = структура(x);
+  // далее можно заполнять массив
+  мэппинг[ключ].x.push(что-то);
+ 
+    }
+    // сеттер
+    function set_ИмяСеттера(uint число) public isAdmin {
+        require(условие проверки, "wrong item key");
+        меняем значение;
+    }
+    // продажа
+    function sell_ИмяФункции() public payable isAdmin {
+        // проверить, зарегистрирован ли продавец
+        require(sum == msg.value, "wrong money value");
+        // перевод денег админа покупателю
+	  // отправляет тот, кто задеплоил функцию
+        payable(кому отправляет).transfer(сколько отправляет);
+    }
+    // как сравнивать строки
+keccak256(abi.encodePacked(строка)) == keccak256(abi.encodePacked(строка))
+// пример работы с вышеуказанными возможностями 
+contract test {
+
+    enum Size {
+        big,
+        medium,
+        small
+    }
+    struct point {
+        uint x;
+        uint y;
+    }
+    struct Doctor {
+        Size size;
+        string FIO;
+        uint[] mas;
+        point location;
+    }
+    mapping(uint => Doctor) doctors;
+    function add() public {
+        uint[] memory las;
+        doctors[111] = Doctor(Size.small, "gma", las, point(3,4));
+        doctors[111].mas.push(10);
+    }
+    function get_size() public view returns(Size){
+        return doctors[111].size;
+	  // выведет 2
+    }
+    function get() public view returns(uint){
+        return doctors[111].mas[0];
+        // выведет 10
+    }
+    mapping(uint => point[]) test;
+}
+
+ганаш
+
+port = 8545
+network = 15
+automine - yes
+error on transaction - yes
+auto generate mnemonic phrase - no
+hardfork - Muir Glacier
+
+апи
+
+installation:
+1) terminal -> pip install web3
+2) file -> settings -> Projects -> PythonInterpritater -> + -> web3
+3) new file -> abi.json
+programming:
+import json
+import web3
+import datetime
+class Massage():
+    ganache_url = "HTTP://127.0.0.1:8545"
+    w3 = web3.Web3(web3.HTTPProvider(ganache_url))
+    address_contract = 'адрес контракта'
+    #address_contract = web3.Web3.toChecksumAddress('0xEc3B33d1405089A76b0b990D0A743EcBFeA8b236')
+    with open("abi.json", "r") as file:
+        abi = json.load(file)
+    contract = w3.eth.contract(address=address_contract, abi=abi)
+#geters
+    def accounts(self):
+        return self.w3.eth.accounts
+    def get_balance(self, address):
+        address = web3.Web3.toChecksumAddress(address)
+        return web3.Web3.fromWei(self.w3.eth.getBalance(address), 'ether')
+    def get_admin(self):
+        return self.contract.functions.get_admin().call()
+    def list_of_clients(self, index):
+        return self.contract.functions.list_of_clients(index).call()
+#seters
+    def add_massagist(self, address_massagist, name_massagist, gender, age):
+        admin = self.get_admin()
+        self.contract.functions.add_massagist(address_massagist, name_massagist, gender, age).transact({'from' : admin})
+    def deal(self, address_client, money, number):
+        temporary = self.contract.functions.deal(number).transact({'from' : address_client, 'value' : money})
+        self.w3.eth.waitForTransactionReceipt(temporary)
+M = Massage()
+print(M.accounts())
+python -m PyQt5.uic.pyuic -x untitled.ui -o untitled.py
+
+гуи 
+
+install:
+1)pip install pyqt5
+  pip install pyqt5-tools
+2)file -> settings -> project -> 
+  interpritator -> должно быть:
+  PyQt5
+  PyQt5-Qt5
+  PyQt5-sip
+  pyqt5-tools
+  pyqt5-plugins
+  qt5-tools
+  qt5-applications
+programming:
+1) создаем форму и элементы, сохраняем файл в проект
+2) terminal -> python -m PyQt5.uic.pyuic -x main.ui -o main.py
+3) питоновский файл, из которого будет запускаться приложение
+4) import datetime
+from PyQt5 import QtWidgets
+from (интерфейс)register import (класс)Ui_mainWindow
+from user import Ui_UserWindow
+import sys
+import main(файл с api)
+# main class authorization
+class Main(QtWidgets.QMainWindow):
+    #обязательная инициализация
+    M = main.Massage()
+    def __init__(self):
+        super().__init__()
+        self.ui = Ui_mainWindow()(название класса)
+        self.ui.setupUi(self)
+        self.eBar = QtWidgets.QErrorMessage()
+        self.eBar.setWindowTitle('Notification')
+	#работа с таблицами
+	#self.ui. table.setHorizontalHeaderLabels(["AAA", "BBB", "CCC"])
+	#называет заголовки, но строки должны быть заранее созданы
+        m = self.M.get_size_of_listc()
+        self.ui.tableWidget.setColumnCount(m)
+        self.ui.tableWidget.setRowCount(1)
+        for i in range(m):
+            self.ui.tableWidget.setItem(i, 0, QtWidgets.QTableWidgetItem(str(self.M.list_of_clients(i)[1])))
+
+        self.ui.pushButton.clicked.connect(self.register_user)
+    def register_user(self):
+        address = self.ui.lineEdit.text()#считать текст из поля для ввода
+        name = "Privalova"
+        self.user_window = UserWindow(address, name, self.M)(класс)
+        self.user_window.show()
+        self.close();
+        self.eBar.showMessage('You have not been registered or you enter wrong FIO!')
+        self.ui.lineEdit.clear()
+	#блоки обработки исключений
+        #try:
+        #    self.L.registration(address, 'Gavrilova')
+        #except:
+        #    self.eBar.showMessage('Error!')
+        #else:
+        #    self.eBar.showMessage('You have been registred succesfully.')
+class UserWindow(QtWidgets.QMainWindow):
+    def __init__(self, address, fio, L):
+        self.address = address
+        self.fio = fio
+        self.L = L
+        super().__init__()
+        self.ui = Ui_UserWindow()
+        self.ui.setupUi(self)
+        self.eBar = QtWidgets.QErrorMessage()
+        self.eBar.setWindowTitle('Notification')
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    myapp = Main()
+    myapp.show()
+    sys.exit(app.exec_())
+#работа с текстовыми метками
+self.ui.label_30.setText(str(self.L.reader(address)[1]))#установить текст в метку
+self.ui.label_30.adjustSize()#увеличить размер метки до размера текста
+text = self.ui.label.text()#получить текст из метки
+#на всякий случай работа со списками
+self.ui.comboBox.addItem (“AAA”)#Добавить новый вариант в список, принимает строку
+self.ui.comboBox.xz()#Стартовое значение, подсказка
+self.ui.comboBox.activated.connect(self.function)#При выборе одного из
+элементов в списке вызывается метод класса, указывается в функции init, 
+скобки не указываются
+item = self.ui.comboBox.currentText()#Считать выбранный элемент списка
+#работа с временем
+sec = int(self.L.reader(self.address)[2])
+date = datetime.datetime.fromtimestamp(sec)
+
+ИНФОРМАЦИОННАЯ СИСТЕМА — БИБЛИОТЕКА
+1.	Выбор блокчейн-решения
+Для реализации блокчейн-решения был выбран блокчейн Hyperledger Fabric.
+Данная платформа поддерживает смарт-контракты — чейнкоды (chaincode), создаваемые на языках общего назначения, таких как Golang, JavaScript, Java, в отличие, от, например, Ethereum, в котором используется контрактно-ориентированный, ограниченный по функциональности язык Solidity.
+Структура Hyperledger Fabric позволяет предприятиям настраивать сеть и использовать механизм консенсуса таким образом, который подходит им лучше, чем другие способы. Предприятие может выбрать модель, которая обеспечивает лучшую производительность его механизмов отказоустойчивости.
+И так, Hyperledger Fabric будет использован в качестве блокчейн-решения так как:
+1) Hyperledger Fabric — надежный реестр для хранения информации и работы с ней.
+2) Это проверенный способ передачи данных.
+3) Имеет высокую производительность и масштабируемость.
+4) Он поддерживает многие языки программирования.
+5) Он осуществляет безопасные сделки через smart-контакты.
+6) Для нашей информационной системы не нужна мировая сеть, такая как Ethereum, поэтому мы используем локальную сеть.
+7) Отсутствие комиссии.
+Hyperledger Fabric позволяет осуществлять частные транзакции, что удобно в случае с содержанием данных в блокчейне о библиотеке, в которой есть читатель, берущий или дарящий книгу, и библиотекарь, отдающий эту книгу и ведущий учет. То есть глобализация в данном случае не важна.
+Использование блокчейн-решения в такой информационной системе, как библиотека крайне важна. Потому что в библиотеке хранятся, как популярные и распространенные книги, так и рукописи, и манускрипты. Любой читатель может взять книгу и не вернуть, поэтому так важно, чтобы система вела учет приема/выдачи книг, хранила информацию обо всех читателях, книгах и последнем держателе конкретного экземпляра книги.
+2.	Техническое задание
+В блокчейне содержатся сведения об абонентах библиотеки, имеющейся литературе и ее хранении. Необходимо вести учет выданной литературы. В каталоге на каждое название книги выписывается каталожная карточка со всеми реквизитами (обложка, уникальный идентификатор, автор, название книги, издатель, дата издания, сколько экземпляров есть в библиотеке). Для удобства создания БД составляются таблицы наличия книг (по пунктам каталожной карточки), причем обязательно указывается количество экземпляров. На каждый экземпляр книги выписывается формуляр с записями о выдаче читателю и возврате, и ФИО читателя. На каждого читателя заполняется абонементная карточка с перечнем полученных книг и ставится дата их выдачи и возврата.
+3.	Основные функциональные модули системы
+Модуль регистрации (рисунок 1) требуется для занесения данных о новом пользователе в систему. Только зарегистрированные пользователи имеют возможность воспользоваться работой сервиса. При регистрации требуется ввести свой логин (ФИО) и пароль.
+Модуль авторизации читателя (рисунок 1) запрашивает логин пользователя и пароль. Если логин или пароль были введены неверно, или читатель не был зарегистрирован, то он не сможет зайти в личный кабинет. Модуль авторизации администратора (рисунок 2) запрашивает его пароль. Если пароль был введен неверно, то администратор не сможет зайти в свой личный кабинет.
+4.	Основные используемые механизмы блокчейн-системы
+В основе блокчейн-составляющей решения (смарт-контракта) лежат функции: выдача/возврат/прием/дарение книги, регистрация пользователя, изменение стоимости вознаграждения за дарение книги. 
+Смарт-контракт – информация о пользователе, дате выдачи, возврата; об экземпляре книги, кто и когда его взял/вернул; о кол-ве конкретных книг, их авторе, годе издания, издательстве, их идентификаторе.
+5.	Стек технологий
+Решение – веб-сайт.
+HyperLedger, JavaScript, Golang – для написания смарт-контракта, основных функций и frontend-части сайта. Язык программирования Golang будет использован в данном решении, так как он наиболее удобен для написания смарт-контрактов в блокчейне Hyperledger fabric.
+Figma – для создания макета будущего интерфейса блокченй-решения, так как является наиболее удобным, функциональным и популярным инструментом для создания и разработки макетов, дизайна будущих веб-приложений. 
+HTML, CSS – для верстки.
+6.	Задачи, которые необходимо решить для выполнения поставленного технического задания. Распределение задач между участниками
+Для успешной реализации проекта требуется написать клиентскую часть приложения, серверную и «блокчейн-составляющую» (смарт-контракт).
+Члены команды: Frontentd-разработчик, Backend-разработчик, дизайнер, блокчейн-разработчик, тестировщик.
+Распределение по времени:
+6.1) Frontentd-разработчик – 35 часов (Для верстки на HTML и CSS, отладки на JS и проверки работоспособности и удобности интерфейса).
+6.2) Backend-разработчик – 60 часов (Для обеспечения работоспособности серверной части веб-приложения).
+6.3) Блокчейн-разработчик – 40 часов для написания смарт контракта и проверки его работоспособности.
+6.4) Дизайнер – 25 часов (Для создания макета интерфейса и разработки дизайна продукта).
+6.5) Тестировщик – 10 часов (Проверка работоспособности всего приложения и удобности интерфейса).
+
+1.	Выбор (с обоснованием) блокчейн-решения с указанием используемого механизма консенсуса.
+Для данного проекта будет использоваться блокчейн технология, потому что с помощью нее возможно обеспечить безопасность учета содержимого склада.
+Блокчейн-решением будут пользоваться крупные склады и оптовые продавцы и покупатели, поэтому я решила использовать глобальную блокчейн систему Ethereum.
+Сеть Ethereum — общедоступная блокчейн платформа, которая отличается универсальностью и гибкостью, что позволяет использовать ее для разработки различных проектов.
+Используя данную технологию, сделки будут оплачиваться с помощью эфириума быстро и надежно, а договора смогут заверяться без привлечения нотариального органа с помощью smart-контактов, что будет удобно для продавцов и покупателей товара. 
+База данных склада будет хранить большое количество информации о товаре, покупателях, продавцах и сделках о продажах, поэтому очень важно, чтобы сеть была надежна и безопасна, эти условия нам может обеспечить сеть Ethereum.
+2.	Разработать подробное техническое задание.
+Нам необходимо создать продукт, который позволит вести учет поставщиков, покупателей, продаж, движения товара на складе. Склад является посредником между продавцом и покупателем и заключает сделку о продаже товара. 
+3.	Указать основные функциональные модули системы и показать их взаимосвязь. Отдельное внимание уделить модулю авторизации в системе.
+После регистрации покупатель\поставщик могут авторизироваться в системе и получить доступ к уникальным функциям. В аккаунте покупателя после авторизации появиться информация о нем, также он сможет купить товар со склада. В аккаунте поставщика будет представлена основная информация о нем, продать товар на склад он сможет только обратившись к администратору. У администратора тоже будет свой аккаунт, где он сможет зарегистрировать поставку на склад, узнать информацию о продажах и заключенных сделках, изменить стоимость товара.
+4.	Отразить основные используемые механизмы блокчейн системы (например: транзакции, блоки, генезис блок, смарт-контракты и т. д.). Каждый механизм рассмотреть подробно и выполнить его детальное описание.
+Смарт-контракт: база данных хранит информацию о имеющимся товаре, поставщике, покупателе и совершенных сделках.
+Функции: регистрация компании покупателя, регистрация компании поставщика, покупка товара со склада, продажа товара на склад, изменение цены товара, просмотр цены заключения контракта.
+5.	Определить и обосновать стек технологий, который предполагается использовать для разработки.
+Remix IDE – для написания смарт-контракта и основных функций.
+Ganache – для создания локальной сети и аккаунтов пользователей, для тестирования системы при разработке.
+PyCharm и Python 3.9 для написания API для смарт контракта.
+Figma – для создания макета будущего интерфейса блокченй-решения,
+PyQt5 – для создания интерфейса приложения.
+6.	Определить все задачи, которые необходимо решить для выполнения поставленного технического задания, распределить задачи между участниками и спланировать их по времени. Обосновать полученный результат.
+Члены команды: Frontend-разработчик, дизайнер, блокчейн-разработчик, тестировщик.
+
+Распределение по времени:
+- Frontend-разработчик (Веб-сайт) – 35 часов (Для верстки на HTML и CSS, отладки на JS и проверки работоспособности и удобности интерфейса).
+- Блокчейн – 30 часов для написания смарт контракта и проверки его работоспособности (с учетом отсутствия знаний).
+- Дизайнер – 10 часов (Для создания интерфейса и передачи кодов цветов и шаблонов Frontend-разработчику).
+- Тестировщик – 10 часов (Проверка работоспособности всего приложения и удобности интерфейса).
+7.	Представить эскизы интерфейса будущего блокчейн решения.
+
+pragma solidity >= 0.7.0;
+pragma experimental ABIEncoderV2; 
+
+contract Market {
+
+    struct Item {
+        string name;
+        uint pos;
+        uint price;
+        address from;
+    }
+
+    struct Shop {
+        string name;
+        mapping(uint => Item) shopit;
+        uint[] keys;
+    }
+
+    struct Buyer {
+        string name;
+        mapping(uint => Item) buyit;
+        mapping(uint => Item) back;
+        uint[] keys;
+    }
+
+
+    mapping(address => Buyer) public buyers;
+    address[] buy_key;
+    mapping(address => Shop) public shops;
+   
+
+    address[2] admins;
+    constructor() {
+        admins[0] = msg.sender;
+        admins[1] = 0xdD870fA1b7C4700F2BD7f44238821C26f7392148;
+    }
+
+    function add_item_shop(uint _id, string memory _name, uint _pos, uint _price) public {
+        if (shops[msg.sender].shopit[_id].price != 0){
+            shops[msg.sender].shopit[_id].pos += _pos;
+        }
+        else {
+            shops[msg.sender].shopit[_id] = Item(_name, _pos, _price, msg.sender);
+            shops[msg.sender].keys.push(_id);
+        }
+    }
+
+    function get_item(uint _id, address _shop) public view returns(Item memory) {
+        return shops[_shop].shopit[_id];
+    }
+
+    function buy_item(uint _id, address _shop, uint _pos) public payable {
+        uint sum = _pos * shops[_shop].shopit[_id].price;
+        payable(_shop).transfer(sum);
+        shops[_shop].shopit[_id].pos -= _pos;
+        buyers[msg.sender].buyit[_id] = Item(shops[_shop].shopit[_id].name, _pos,shops[_shop].shopit[_id].price, _shop);
+    }
+
+    function give_back(uint _id, uint _pos) public {
+        buyers[msg.sender].back[_id] = Item(buyers[msg.sender].buyit[_id].name, _pos, buyers[msg.sender].buyit[_id].price, buyers[msg.sender].buyit[_id].from);
+    }
+
+    function back_item(uint _id, address _buyer) public view returns(Item memory) {
+        return  buyers[_buyer].back[_id];
+    }
+
+    function disagree(uint _id, address _buyer) public {
+        delete buyers[_buyer].back[_id];
+    }
+
+    function agree(uint _id, address _buyer) public payable {
+        uint sum =  buyers[_buyer].back[_id].price *  buyers[_buyer].back[_id].pos;
+        payable(_buyer).transfer(sum);
+        buyers[_buyer].buyit[_id].pos -= buyers[_buyer].back[_id].pos;
+        add_item_shop(_id, buyers[_buyer].back[_id].name, buyers[_buyer].back[_id].pos, buyers[_buyer].back[_id].price);
+        delete buyers[_buyer].back[_id];
+    }
+
+}
